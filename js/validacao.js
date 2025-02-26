@@ -54,13 +54,23 @@ const mensagensDeErro = {
     },
     estado: {
         valueMissing: 'O campo de estado não pode estar vazio.'
+    },
+    telefone: {
+        valueMissing: 'O campo de telefone não pode estar vazio.',
+        patternMismatch: 'O telefone digitado não é válido. Deve conter o DDD seguido de 8 ou 9 dígitos.'
+    },
+    instagram: {
+        valueMissing: 'O campo de Instagram não pode estar vazio.',
+        patternMismatch: 'O Instagram deve começar com @ e conter apenas letras, números e pontos.'
     }
 }
 
 const validadores = {
     dataNascimento:input => validaDataNascimento(input),
     cpf:input => validaCPF(input),
-    cep:input => recuperarCEP(input)
+    cep:input => recuperarCEP(input),
+    telefone: input => validaTelefone(input),
+    instagram: input => validaInstagram(input)
 }
 
 function mostraMensagemDeErro(tipoDeInput, input) {
@@ -98,6 +108,30 @@ function validaCPF(input) {
 
     if(!checaCPFRepetido(cpfFormatado) || !checaEstruturaCPF(cpfFormatado)) {
         mensagem = 'O CPF digitado não é válido.'
+    }
+
+    input.setCustomValidity(mensagem)
+}
+
+function validaTelefone(input) {
+    const telefoneFormatado = input.value.replace(/\D/g, '')
+    let mensagem = ''
+
+    const telefoneValido = /^[1-9]{2}[9]{0,1}[0-9]{8}$/.test(telefoneFormatado)
+
+    if (!telefoneValido) {
+        mensagem = 'O telefone digitado não é válido. Deve conter o DDD seguido de 8 ou 9 dígitos.'
+    }
+
+    input.setCustomValidity(mensagem)
+}
+
+function validaInstagram(input) {
+    const instagramValido = /^@[a-zA-Z0-9._]+$/.test(input.value)
+    let mensagem = ''
+
+    if (!instagramValido) {
+        mensagem = 'O Instagram deve começar com @ e conter apenas letras, números e pontos.'
     }
 
     input.setCustomValidity(mensagem)
