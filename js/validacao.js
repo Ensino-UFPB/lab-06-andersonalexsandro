@@ -77,7 +77,11 @@ function mostraMensagemDeErro(tipoDeInput, input) {
     let mensagem = ''
     tiposDeErro.forEach(erro => {
         if(input.validity[erro]) {
-            mensagem = mensagensDeErro[tipoDeInput][erro]
+            if (mensagensDeErro[tipoDeInput] && mensagensDeErro[tipoDeInput][erro]) {
+                mensagem = mensagensDeErro[tipoDeInput][erro]
+            } else {
+                mensagem = 'Este campo não está válido'
+            }
         }
     })
     
@@ -118,9 +122,10 @@ function validaTelefone(input) {
     let mensagem = ''
 
     const telefoneValido = /^[1-9]{2}[9]{0,1}[0-9]{8}$/.test(telefoneFormatado)
+    const formatoValido = /^[0-9()\- ]+$/.test(input.value)
 
-    if (!telefoneValido) {
-        mensagem = 'O telefone digitado não é válido. Deve conter o DDD seguido de 8 ou 9 dígitos.'
+    if (!telefoneValido || !formatoValido) {
+        mensagem = 'O telefone digitado não é válido. Deve conter o DDD seguido de 8 ou 9 dígitos e pode conter apenas números, parênteses e hífens.'
     }
 
     input.setCustomValidity(mensagem)
